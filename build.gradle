@@ -14,18 +14,22 @@ buildscript {
 apply plugin: "kotlin"
 apply plugin: "application"
 
-mainClassName = 'watchReminder.TestKt'
+mainClassName = 'watchReminder.MyAppKt'
 
 defaultTasks 'run'
 
 repositories {
 	mavenCentral()
 }
+compileKotlin {
+	kotlinOptions.jvmTarget= "1.8"
+}
 
 dependencies {
 	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 	testCompile 'junit:junit:4.11'
 	testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+	compile 'no.tornado:tornadofx:1.7.15'
 }
 
 task wrapper(type: Wrapper){
