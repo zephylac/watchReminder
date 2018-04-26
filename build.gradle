@@ -1,0 +1,13 @@
+apply plugin: "kotlin"
+
+sourceSets {
+    main.kotlin.srcDirs += 'src/main/'
+}
+
+repositories {
+    mavenCentral()
+}
+
+mainClassName = 'test.kt'
+
+defaultTasks 'run'
