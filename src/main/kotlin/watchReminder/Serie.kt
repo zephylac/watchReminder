@@ -10,6 +10,11 @@ import io.reactivex.rxkotlin.*
 
 class Serie(val id: Int, val name: String, val season: Int, val episode: Int) {
 
+	/** Overried toString Method
+	*
+	*/
+	override fun toString() : String = "$id - $name - $season - $episode"
+
 	/**
 	* Deletes this `Serie` instance
 	*/
