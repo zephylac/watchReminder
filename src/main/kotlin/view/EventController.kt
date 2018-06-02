@@ -38,10 +38,14 @@ class EventController: Controller() {
 		val deleteSeries = BehaviorSubject.create<Set<Int>>()
 		val deletedSeries = BehaviorSubject.create<Set<Int>>()
 
+		val refreshedSeries1 = BehaviorSubject.create<Set<Unit>>()
+
 		val refreshedSeries = BehaviorSubject.create<Set<Int>>()
 		val IncSeasonSeries = BehaviorSubject.create<Set<Int>>()
-
 		val DecSeasonSeries = BehaviorSubject.create<Set<Int>>()
+
+		val IncSeasonSeries1 = BehaviorSubject.create<Serie>()
+
 		val IncEpisodeSeries = BehaviorSubject.create<Set<Int>>()
 		val DecEpisodeSeries = BehaviorSubject.create<Set<Int>>()
 }

@@ -4,11 +4,18 @@ import org.nield.rxkotlinjdbc.execute
 import org.nield.rxkotlinjdbc.insert
 import org.nield.rxkotlinjdbc.select
 
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxjavafx.subscriptions.CompositeBinding
+
 import app.flatCollect
 import io.reactivex.rxkotlin.*
 
 
 class Serie(val id: Int, val name: String, val season: Int, val episode: Int) {
+
+	//We maintain a collection of bindings and disposables to unsubscribe them later
+	private val bindings = CompositeBinding()
+	private val disposables = CompositeDisposable()
 
 	/** Overried toString Method
 	*
@@ -49,6 +56,15 @@ class Serie(val id: Int, val name: String, val season: Int, val episode: Int) {
 	fun decEpisode() = db.execute("UPDATE SERIE SET EPISODE = EPISODE - 1 WHERE ID = ?")
 	.parameter(id)
 	.toSingle()
+
+	/**Releases any reactive disposables associated with this SalesPerson.
+	 * This is very critical to prevent memory leaks with infinite hot Observables
+	 * because they do not know when they are complete
+	 */
+	fun dispose() {
+			bindings.dispose()
+			disposables.dispose()
+	}
 
 	companion object {
 

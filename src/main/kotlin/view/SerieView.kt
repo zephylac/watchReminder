@@ -44,6 +44,23 @@ class SerieView : View() {
 			readonlyColumn("SEASON", Serie::season)
 			readonlyColumn("EPISODE", Serie::episode)
 
+			onUserSelect{
+				when(selectedCell!!.column){
+					1 -> println("lol")//selectedItem?.apply { currentSelections.flatMapSingle{ it.incSeason() }.subscribe(controller.refreshedSeries1) }//Observable.just(it.id).subscribe(controller.IncSeasonSeries) }
+					2 -> selectedItem?.apply { Observable.just(it)
+						.subscribe {
+							selectionModel.clearSelection()
+							selectionModel.select(it)
+							requestFocus()
+							Observable.just(it).subscribe(controller.IncSeasonSeries1)
+							println(it)
+						}
+					}
+				}
+			}
+
+
+
 
 			columnResizePolicy = SmartResize.POLICY
 			selectionModel.selectionMode = SelectionMode.MULTIPLE
@@ -55,6 +72,7 @@ class SerieView : View() {
 
 			//Import data and refresh event handling
 			controller.refreshSeries.startWith(Unit)
+			.doOnNext { items.forEach { it.dispose() } }
 			.flatMapSingle {
 				Serie.all.toList()
 			}.subscribeBy(
@@ -169,6 +187,17 @@ class SerieView : View() {
 			table.requestFocus()
 		}
 
+		//increment by one season
+		val incrementS1 = controller.IncSeasonSeries1
+		.flatMapSingle {
+			table.currentSelections.toList()
+			.flatMapObservable { it.toObservable() }
+			//.flatMapSingle { it.incSeason() }
+			.map{ println(it)}
+			.toSet()
+		}
+		incrementS1.subscribe(controller.refreshedSeries1)
+
 
 		//increment by one season
 		val incrementS = controller.IncSeasonSeries
@@ -227,6 +256,10 @@ class SerieView : View() {
 
 		//refresh on deletion
 		controller.refreshedSeries
+		.map { Unit }
+		.subscribe(controller.refreshSeries) //push this refresh Series
+
+		controller.refreshedSeries1
 		.map { Unit }
 		.subscribe(controller.refreshSeries) //push this refresh Series
 
